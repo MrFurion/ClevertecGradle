@@ -1,22 +1,24 @@
 package by.trubetski.springmvc;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StringUtilsTest {
 
-    @Test
-    void isPositiveNumber() {
-        assertTrue(StringUtils.isPositiveNumber("123"));
-        assertTrue(StringUtils.isPositiveNumber("0"));
-        assertTrue(StringUtils.isPositiveNumber("2.3"));
-        assertFalse(StringUtils.isPositiveNumber("-123"));
-        assertFalse(StringUtils.isPositiveNumber(null));
-        assertFalse(StringUtils.isPositiveNumber(""));
-        assertFalse(StringUtils.isPositiveNumber("  "));
-        assertFalse(StringUtils.isPositiveNumber("a123"));
-        assertFalse(StringUtils.isPositiveNumber("123a"));
+    @ParameterizedTest
+    @ValueSource(strings = {"123", "0", "2.3"})
+    void testIsPositiveNumber_PositiveCases(String input) {
+        assertTrue(StringUtils.isPositiveNumber(input), "Expected positive number: " + input);
+    }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"-123", "", "  ", "a123", "123a"})
+    @NullSource
+    void testIsPositiveNumber_NegativeCases(String input) {
+        assertFalse(StringUtils.isPositiveNumber(input), "Expected non-positive number: " + input);
     }
 }
